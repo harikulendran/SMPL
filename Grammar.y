@@ -23,22 +23,20 @@ import Data.List
 %left '&' ','
 %%
 
-DExp : Expr do CExp         { Do $1 $3 }
+DExp : Expr do CExp          { Do $1 $3 }
      
-Expr : for CExp in file     { For $2 $4 }
-     | ifexist CExp in Expr { IfExist $2 $4 }
-     | BExp                 { $1 }
+Expr : for CExp in file      { For $2 $4 }
+     | ifexist CExp in Expr  { IfExist $2 $4 }
+     | BExp                  { $1 }
 
-BExp : BExp '&' AExp        { And $1 $3 }
-     | '(' Expr ')'         { $2 }
+BExp : BExp '&' AExp         { And $1 $3 }
+     | '(' Expr ')'          { $2 }
 
-AExp : VExp '=' VExp        { Equals $1 $3 }
-     | BExp                 { $1 }
-     | '(' AExp ')'         { $2 }
+AExp : '(' VExp '=' VExp ')' { Equals $2 $4 }
+     | BExp                  { $1 }
 
 CExp : VExp                  { $1 }
      | VExp ',' CExp         { Comma $1 $3 }
-     | '(' CExp ')'          { $2 }
 
 VExp : var                   { Var $1 }
 
