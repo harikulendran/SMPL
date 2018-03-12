@@ -6,3 +6,4 @@ Tokens.hs
 *.iml
 *.cabal
 *.yaml
+.idea/
