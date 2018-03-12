@@ -1,0 +1,5 @@
+*.info
+*BAKUP
+*.txt
+Grammar.hs
+Tokens.hs
