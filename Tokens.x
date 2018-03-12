@@ -11,7 +11,6 @@ $alpha = [a-zA-Z]
 tokens :-
 $white+        ;
   "--".*       ;
-  cout         { tok (\p s -> TokenPrint p) }
   do           { tok (\p s -> TokenDo p) } 
   \&           { tok (\p s -> TokenAnd p) } 
   \=           { tok (\p s -> TokenEquals p) } 
@@ -28,7 +27,6 @@ $white+        ;
 tok f p s = f p s
 
 data Token = 
-  TokenPrint AlexPosn        |
   TokenDo AlexPosn           |
   TokenAnd AlexPosn          |
   TokenEquals AlexPosn       |
@@ -42,7 +40,6 @@ data Token =
   TokenRParen AlexPosn
   deriving (Eq,Show)
 
-token_posn (TokenPrint p) = p
 token_posn (TokenDo p) = p
 token_posn (TokenAnd p) = p
 token_posn (TokenEquals p) = p
