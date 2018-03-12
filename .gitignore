@@ -4,3 +4,7 @@
 *.txt
 Grammar.hs
 Tokens.hs
+*.iml
+*.cabal
+*.yaml
+.idea/
