@@ -1,4 +1,4 @@
-makeinterpreter: Grammar.y Tokens.x
+makeinterpreter: Grammar.y Tokens.x Evaluator.hs
 	alex Tokens.x
 	happy Grammar.y
-	ghci Grammar.hs
+	ghci Evaluator.hs
