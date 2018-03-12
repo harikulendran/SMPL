@@ -8,7 +8,6 @@ import Data.List
 %tokentype { Token }
 %error { shiveShilarny }
 %token
-    cout    { TokenPrint p }
     do      { TokenDo p }
     '&'     { TokenAnd p }
     '='     { TokenEquals p }
@@ -24,15 +23,23 @@ import Data.List
 %left '&' ','
 %%
 
-Expr : cout Expr            { Print $2 }
-     | ifexist Expr in Expr { IfExist $2 $4 }
-     | for Expr in file     { For $2 $4 }
-     | Expr '=' Expr        { Equals $1 $3 }
-     | Expr '&' Expr        { And $1 $3 }
-     | Expr ',' Expr        { Comma $1 $3 }
-     | Expr do  Expr        { Do $1 $3 }
-     | '(' Expr ')'         { $2 }
-     | var                  { Var $1 }
+DExp : Expr do CExp          { Do $1 $3 }
+     
+Expr : for CExp in file      { For $2 $4 }
+     | ifexist CExp in Expr  { IfExist $2 $4 }
+     | BExp                  { $1 }
+
+BExp : BExp '&' AExp         { And $1 $3 }
+     | '(' Expr ')'          { $2 }
+
+AExp : '(' VExp '=' VExp ')' { Equals $2 $4 }
+     | BExp                  { $1 }
+
+CExp : VExp                  { $1 }
+     | VExp ',' CExp         { Comma $1 $3 }
+
+VExp : var                   { Var $1 }
+
 
 {
 shiveShilarny :: [Token] -> a
