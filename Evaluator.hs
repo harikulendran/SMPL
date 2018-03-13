@@ -113,10 +113,14 @@ eval (scope,vars) = do
         filt (d:ds) [] outl outA mem = filt ds mem [] (outA++[outl]) []
         filt (d:ds) (v:vs) outl outA mem | d `contains` (fst v) = filt (d:ds) vs (outl++(find (fst v) d)++", ") outA (mem++[v])
                                          | otherwise = filt (d:ds) vs outl outA (mem++[v])
-    mapM_ putStrLn (map orderLine fdata)
+    return $ unlines $ map orderLine fdata
 
 
 
 
 --Interpret
-interpret str = eval (eval' [] (shive $ alexScanTokens str) "null")
+interpret str = eval (eval' [] (shive $ alexScanTokens str) "null") >>= putStr
+
+
+--For testing
+testInterpret str = eval (eval' [] (shive $ alexScanTokens str) "null")
