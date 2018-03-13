@@ -80,7 +80,7 @@ eval (s:scope) = do
         filt (d:ds) [] outl outA mem = filt ds mem [] (outA++[outl]) []
         filt (d:ds) (v:vs) outl outA mem | d `contains` (fst v) = filt (d:ds) vs (outl++(find (fst v) d)++", ") outA (mem++[v])
                                          | otherwise = filt (d:ds) vs outl outA (mem++[v])
-    putStr (unlines (filt fdata scope [] [] []))
+    return (unlines (filt fdata scope [] [] []))
 
 
 
