@@ -41,41 +41,42 @@ s1 ## (s:s2) = (s1 # s) ## s2
 
 
 --Operator Implementations
-filterScope :: Scope -> Scope -> Scope
-filterScope _ [] = []
-filterScope s1 (s:s2) | s1 `contains` (fst s) = (fst s,(find (fst s) s1)):(filterScope s1 s2)
-                      | otherwise = filterScope s1 s2
+filterScope :: Scope -> Scope -> Scope -> (Scope,Scope)
+filterScope s1 [] out = (out,s1)
+filterScope s1 (s:s2) out | s1 `contains` (fst s) = filterScope s1 s2 (out++[(fst s,(find (fst s) s1))])
+                          | otherwise = filterScope s1 s2 out
 
     
-eval' :: Scope -> Expr -> Scope
+eval' :: Scope -> Expr -> (Scope,Scope)
 eval' scope expr = case expr of
-    Var i       -> scope ++ [(i,"null")]
-    Comma e1 e2 -> (eval' scope e1) ++ (eval' scope e2)
-    For e s     -> (0,s):(eval' scope e)
-    Do e1 e2    -> filterScope (eval' scope e1) ((0,"file"):(eval' scope e2))
+    Var i       -> (scope ++ [(i,"null")],[])
+    Comma e1 e2 -> ((fst(eval' scope e1)) ++ (fst(eval' scope e2)),[])
+    For e s     -> ((0,s):(fst(eval' scope e)),[])
+    Do e1 e2    -> filterScope (fst(eval' scope e1)) ((0,"file"):(fst(eval' scope e2))) []
 
 
 
 
 -- Reading Files
-commaSplit :: Text.Text -> Scope
-commaSplit line =
-    let split [] ys zs n = ys++[(n,zs)]
-        split (x:xs) ys zs n | x == ',' = split xs (ys++[(n,zs)]) [] (n+1)
-                             | otherwise = split xs ys (zs++[x]) n
-    in split (Text.unpack line) [] [] 1
+commaSplit :: Text.Text -> Scope -> Scope
+commaSplit line scope =
+    let split _ ys _ []              = ys
+        split [] ys zs (v:vars)      = ys++[(fst v,zs)]
+        split (x:xs) ys zs (v:vars)  | x == ',' = split xs (ys++[(fst v,zs)]) [] vars
+                                     | otherwise = split xs ys (zs++[x]) (v:vars)
+    in split (Text.unpack line) [] [] scope
 
 
-updateLine :: [Scope] -> [Text.Text] -> [Scope]
-updateLine scopes [] = scopes
-updateLine scopes (line:lines) = ((commaSplit line):(updateLine scopes lines))
+updateLine :: Scope -> [Text.Text] -> [Scope]
+updateLine scopes [] = []
+updateLine scopes (line:lines) = ((commaSplit line scopes):(updateLine scopes lines))
 
 readCSV scopes filename = do
     file <- Text.lines <$> (Text.readFile filename)
     return (updateLine scopes file)
 
-eval (s:scope) = do
-    fdata <- readCSV [] (snd s)
+eval (s:scope,vars) = do
+    fdata <- readCSV (tail vars) (snd s)
     let filt [] _ _ outA _ = outA
         filt (d:ds) [] outl outA mem = filt ds mem [] (outA++[outl]) []
         filt (d:ds) (v:vs) outl outA mem | d `contains` (fst v) = filt (d:ds) vs (outl++(find (fst v) d)++", ") outA (mem++[v])
