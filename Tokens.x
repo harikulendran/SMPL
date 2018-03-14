@@ -22,7 +22,7 @@ $white+        ;
   \,           { tok (\p s -> TokenComma p) } 
   \(           { tok (\p s -> TokenLParen p) } 
   \)           { tok (\p s -> TokenRParen p) } 
-  $alpha [$alpha $digit \.]*   { tok (\p s -> TokenFile p s) } 
+  $alpha [$alpha $digit \.\_\/]*   { tok (\p s -> TokenFile p s) } 
 
 {
 tok f p s = f p s
