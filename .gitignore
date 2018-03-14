@@ -1,5 +1,6 @@
 *.info
 *.swp
+*.swo
 *BAKUP
 *.txt
 Grammar.hs

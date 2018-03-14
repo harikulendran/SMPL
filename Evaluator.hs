@@ -81,8 +81,7 @@ loadFiles scopes vars = do
         crossP xs ys = [ x++y | x<-xs, y<-ys ]
 
     let crossPA [] o = o
-        crossPA _ [] = []
-        crossPA (x:xs) o = crossPA xs (crossP o x) 
+        crossPA (x:xs) o | and $ map (\n -> n/=[]) (x:xs) =  crossPA xs (crossP o x) 
 
     allData <- sequence $ map sRead names
     return (crossPA allData [])
