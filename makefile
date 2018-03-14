@@ -7,7 +7,7 @@ Grammar.hs : Grammar.y
 	happy Grammar.y
 
 Evaluator : Tokens.hs Grammar.hs Helpers.hs Evaluator.hs
-	ghc --make -o myinterpeter Evaluator
+	ghc --make -o myinterpreter Evaluator
 
 clean:
 	rm -f *.o *.hi
