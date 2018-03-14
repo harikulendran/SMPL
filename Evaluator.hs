@@ -176,7 +176,6 @@ eval (scope,vars) = do
 
 
 
-
 --Interpret
 interpret str = eval (eval' [] (shive $ alexScanTokens str) "null") >>= putStr
 
