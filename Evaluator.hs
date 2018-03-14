@@ -70,11 +70,11 @@ updateLine scopes [] _ = []
 updateLine scopes (line:lines) name = ((commaSplit line name scopes):(updateLine scopes lines name))
 
 readCSV scopes filename = do
-    file <- Text.lines <$> (Text.readFile filename)
+    file <- Text.lines <$> (Text.readFile (split filename '|'))
     return (updateLine scopes file filename)
 
 loadFiles scopes vars = do
-    let names = map (\n -> split n '|') (scopes `findAll` 0)
+    let names = scopes `findAll` 0
     let sRead a = readCSV (scopes `removeAll` 0) a
 
     let crossP [] ys = ys
