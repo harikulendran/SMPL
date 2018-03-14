@@ -4,6 +4,7 @@ import Tokens
 import Grammar
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
+import Data.List (sort)
 
 type Scope = [(Int,String)]
 
@@ -28,6 +29,11 @@ findAll scope n =
                               | otherwise  = findAll' ss n out
     in findAll' scope n []
 
+remove :: Scope -> Int -> Scope
+remove     [] n              = []
+remove (s:ss) n | fst s == n = ss
+                | otherwise  = s:(remove ss n)
+
 removeAll :: Scope -> Int -> Scope
 removeAll s n = 
     let removeAll' [] n mem                  = mem
@@ -41,14 +47,24 @@ update scope val =
                            | otherwise      = update' ss v (m++[s])
     in update' scope val []
 
+equiv :: [String] -> Bool
+equiv xs = (filter (\n -> n /= (head xs)) xs) == []
+
+
 
 
 
 --Operator Implementations
+--rename this one (maybe use update function
 filterScope :: Scope -> Scope -> Scope -> (Scope,Scope)
 filterScope s1 [] out = (s1,out)
 filterScope s1 (s:s2) out | s1 `contains` (fst s) = filterScope s1 s2 (out++[(fst s,(find (fst s) s1))])
                           | otherwise = filterScope s1 s2 out
+
+filterByExist :: Scope -> Scope -> (Scope,Scope)
+filterByExist   []     _ = ([],[])
+filterByExist vars scope | (and $ map (\n -> scope `contains` (fst n)) vars)  = (scope,[])
+                         | otherwise                                          = ([],[]) 
 
 
     
@@ -57,6 +73,7 @@ eval' scope expr str  = case expr of
     Var i             -> (scope ++ [(i,str)],[])
     Comma e1 e2       -> ((fst(eval' scope e1 str)) ++ (fst(eval' scope e2 str)),[])
     For e s           -> ((0,s):(fst(eval' scope e s)),[])
+    IfExist e1 e2     -> filterByExist (fst $ eval' scope e1 str) (fst $ eval' scope e2 str)
     And e1 e2         -> ((fst $ eval' scope e1 str) ++ (fst $ eval' scope e2 str),[])
     Do e1 e2          -> filterScope (fst(eval' scope e1 str)) ((fst(eval' scope e2 str))) []
 
@@ -90,7 +107,7 @@ readCSV scopes filename = do
 
 loadFiles scopes vars = do
     let names = scopes `findAll` 0
-    let sRead a = readCSV (vars `removeAll` 0) a
+    let sRead a = readCSV (scopes `removeAll` 0) a
 
     let crossP [] ys = ys
         crossP xs ys = [ x++y | x<-xs, y<-ys ]
@@ -105,15 +122,14 @@ eval (scope,vars) = do
     fdata <- loadFiles scope vars
     let orderLine' :: Scope -> Scope -> String
         orderLine'        [] line = []
-        orderLine' (v:oVars) line = (find (fst v) line)++", "++(orderLine' oVars line)
+        orderLine' (v:oVars) line | varsEquiv line = (find (fst v) line)++", "++(orderLine' oVars line)
+                                  | otherwise      = []
+
+        varsEquiv scp = and $ map (\var -> (equiv $ scp `findAll` (fst var))) scp
 
         orderLine line = orderLine' vars line
-       
-        filt [] _ _ outA _ = outA
-        filt (d:ds) [] outl outA mem = filt ds mem [] (outA++[outl]) []
-        filt (d:ds) (v:vs) outl outA mem | d `contains` (fst v) = filt (d:ds) vs (outl++(find (fst v) d)++", ") outA (mem++[v])
-                                         | otherwise = filt (d:ds) vs outl outA (mem++[v])
-    return $ unlines $ map orderLine fdata
+
+    return $ unlines $ sort $ filter (\n -> n /= []) (map orderLine fdata)
 
 
 
