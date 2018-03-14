@@ -1,5 +1,6 @@
 module Main where
 
+import Data.Functor
 import System.Environment
 import Tokens
 import Grammar
