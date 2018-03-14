@@ -115,7 +115,9 @@ eval (scope,vars) = do
         cleanLine s (([a,b,c]):rs) = cleanLine (rename s a b c) rs
         cleanData fdata scope = map (\n -> cleanLine (fst n) (subRules (snd n))) (zip fdata (repeat scope))
 
-        orderLine line = init $ orderLine' (head $ cleanData [vars] scope) line
+        orderLine'' line = orderLine' (head $ cleanData [vars] scope) line
+        orderLine line | orderLine'' line == [] = []
+                       | otherwise = init $ orderLine'' line
 
     return $ unlines $ sort $ filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
 
