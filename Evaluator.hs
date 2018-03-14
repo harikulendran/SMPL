@@ -77,7 +77,8 @@ loadFiles scopes vars = do
     let names = scopes `findAll` 0
     let sRead a = readCSV (scopes `removeAll` 0) a
 
-    let crossP [] ys = ys
+    let crossP [] _ = []
+        crossP _ [] = []
         crossP xs ys = [ x++y | x<-xs, y<-ys ]
 
     let crossPA [] o = o
