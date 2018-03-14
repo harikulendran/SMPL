@@ -8,3 +8,4 @@ Tokens.hs
 *.cabal
 *.yaml
 .idea/
+.DS*
