@@ -13,6 +13,7 @@ import Data.List
     '='     { TokenEquals p }
     for     { TokenFor p }
     in      { TokenIn p }
+    as      { TokenAs p }
     file    { TokenFile p $$ }
     ifexist { TokenIfExist p }
     var     { TokenVar p $$ }
@@ -23,22 +24,23 @@ import Data.List
 %left '&' ','
 %%
 
-DExp : Expr do CExp          { Do $1 $3 }
+DExp : Expr do CExp              { Do $1 $3 }
      
-Expr : for CExp in file      { For $2 $4 }
-     | ifexist CExp in Expr  { IfExist $2 $4 }
-     | BExp                  { $1 }
+Expr : for CExp in FExp as FExp  { For $2 $4 $6 }
+     | ifexist CExp in Expr      { IfExist $2 $4 }
+     | BExp                      { $1 }
 
-BExp : BExp '&' AExp         { And $1 $3 }
-     | '(' Expr ')'          { $2 }
+BExp : BExp '&' AExp             { And $1 $3 }
+     | '(' Expr ')'              { $2 }
 
-AExp : '(' VExp '=' VExp ')' { Equals $2 $4 }
-     | BExp                  { $1 }
+AExp : '(' VExp '=' VExp ')'     { Equals $2 $4 }
+     | BExp                      { $1 }
 
-CExp : VExp                  { $1 }
-     | VExp ',' CExp         { Comma $1 $3 }
+CExp : VExp                      { $1 }
+     | VExp ',' CExp             { Comma $1 $3 }
 
-VExp : var                   { Var $1 }
+VExp : var                       { Var $1 }
+FExp : file                      { $1 }
 
 
 {
@@ -53,7 +55,7 @@ shiveShilarny xs = error ("Shive shilarny at " ++ lcn ++ "\n")
 
 data Expr = Print Expr
           | IfExist Expr Expr
-          | For Expr String
+          | For Expr String String
           | Equals Expr Expr
           | And Expr Expr
           | Comma Expr Expr

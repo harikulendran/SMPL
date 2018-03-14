@@ -16,6 +16,7 @@ $white+        ;
   \=           { tok (\p s -> TokenEquals p) } 
   for          { tok (\p s -> TokenFor p) } 
   in           { tok (\p s -> TokenIn p) } 
+  as           { tok (\p s -> TokenAs p) }
   ifexist      { tok (\p s -> TokenIfExist p) } 
   $digit+      { tok (\p s -> TokenVar p (read s)) } 
   \,           { tok (\p s -> TokenComma p) } 
@@ -32,6 +33,7 @@ data Token =
   TokenEquals AlexPosn       |
   TokenFor AlexPosn          |
   TokenIn AlexPosn           |
+  TokenAs AlexPosn           |
   TokenFile AlexPosn String  |
   TokenIfExist AlexPosn      |
   TokenVar AlexPosn Int      |
@@ -45,6 +47,7 @@ token_posn (TokenAnd p) = p
 token_posn (TokenEquals p) = p
 token_posn (TokenFor p) = p
 token_posn (TokenIn p) = p
+token_posn (TokenAs p) = p
 token_posn (TokenFile p a) = p
 token_posn (TokenIfExist p) = p
 token_posn (TokenVar p a) = p

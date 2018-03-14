@@ -62,3 +62,7 @@ equiv xs = (filter (\n -> n /= (head xs)) xs) == []
 
 lzip (x:xs) (y:ys) = (x++[y]):lzip xs ys
 lzip      _      _ = []
+
+split      [] delim = []
+split (s:str) delim | s == delim = str
+                    | otherwise  = split str delim

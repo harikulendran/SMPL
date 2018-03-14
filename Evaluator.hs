@@ -39,7 +39,7 @@ eval' :: Scope -> Expr -> String  -> (Scope,Scope)
 eval' scope expr str  = case expr of
     Var i                -> (scope ++ [(i,str)],[])
     Comma e1 e2          -> ((fst(eval' scope e1 str)) ++ (fst(eval' scope e2 str)),[])
-    For e s              -> ((0,s):(fst(eval' scope e s)),[])
+    For e s1 s2          -> ((0,s2++"|"++s1):(fst(eval' scope e (s2++"|"++s1))),[])
     IfExist e1 e2        -> filterByExist (fst $ eval' scope e1 str) (fst $ eval' scope e2 str)
     And e (Equals v1 v2) -> filterByEqual (fst $ eval' scope e str) (head $ fst $ eval' scope v1 str) (head $ fst $ eval' scope v2 str)
     And e1 e2            -> ((fst $ eval' scope e1 str) ++ (fst $ eval' scope e2 str),[])
@@ -74,7 +74,7 @@ readCSV scopes filename = do
     return (updateLine scopes file filename)
 
 loadFiles scopes vars = do
-    let names = scopes `findAll` 0
+    let names = map (\n -> split n '|') (scopes `findAll` 0)
     let sRead a = readCSV (scopes `removeAll` 0) a
 
     let crossP [] ys = ys
@@ -97,7 +97,7 @@ eval (scope,vars) = do
         varsEquiv scp = and $ map (\var -> (equiv $ scp `findAll` (fst var))) scp
         
         --Get substitution rules
-        subRules scope = lzip (map head (group $ sort $ map (\n -> sort [fst n, read (filter isNumber (snd n))::Int]) (filter (\n -> '=' `elem` (snd n)) scope))) [1..]
+        subRules scope = lzip (map head (group $ sort $ map (\n -> sort [fst n, read (filter isNumber (split (snd n) '='))::Int]) (filter (\n -> '=' `elem` (snd n)) scope))) [1..]
 
         --Get next free variable
         getBndVars scp = map head (group $ sort $ map fst scp)
