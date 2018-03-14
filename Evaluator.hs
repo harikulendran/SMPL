@@ -1,5 +1,6 @@
-module Evaluator where
+module Main where
 
+import System.Environment
 import Tokens
 import Grammar
 import qualified Data.Text as Text
@@ -132,3 +133,7 @@ execute filename = do
     command <- Text.lines <$> (Text.readFile filename)
     let string = Text.unpack $ head $ command
     interpret string
+
+main = do 
+    args <- getArgs
+    execute $ head $ args

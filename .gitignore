@@ -10,3 +10,4 @@ Tokens.hs
 *.yaml
 .idea/
 .DS*
+myinterpreter
