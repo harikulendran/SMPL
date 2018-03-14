@@ -27,6 +27,7 @@ import Data.List
 DExp : Expr do CExp              { Do $1 $3 }
      
 Expr : for CExp in FExp as FExp  { For $2 $4 $6 }
+     | for CExp in FExp          { For $2 $4 "A"}
      | ifexist CExp in Expr      { IfExist $2 $4 }
      | BExp                      { $1 }
 
