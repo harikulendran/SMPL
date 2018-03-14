@@ -93,7 +93,7 @@ eval (scope,vars) = do
     fdata <- loadFiles scope vars
     let orderLine' :: Scope -> Scope -> String
         orderLine'        [] line = []
-        orderLine' (v:oVars) line | varsEquiv line = (find (fst v) line)++", "++(orderLine' oVars line)
+        orderLine' (v:oVars) line | varsEquiv line = (find (fst v) line)++","++(orderLine' oVars line)
                                   | otherwise      = []
 
         varsEquiv scp = and $ map (\var -> (equiv $ scp `findAll` (fst var))) scp
@@ -115,7 +115,7 @@ eval (scope,vars) = do
         cleanLine s (([a,b,c]):rs) = cleanLine (rename s a b c) rs
         cleanData fdata scope = map (\n -> cleanLine (fst n) (subRules (snd n))) (zip fdata (repeat scope))
 
-        orderLine line = orderLine' (head $ cleanData [vars] scope) line
+        orderLine line = init $ orderLine' (head $ cleanData [vars] scope) line
 
     return $ unlines $ sort $ filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
 
