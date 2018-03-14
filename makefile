@@ -1,4 +1,4 @@
-makeinterpreter: Evaluator
+makeinterpreter: Evaluator clean
 
 Tokens.hs : Tokens.x
 	alex Tokens.x
