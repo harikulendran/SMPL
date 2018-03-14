@@ -82,6 +82,7 @@ loadFiles scopes vars = do
 
     let crossPA [] o = o
         crossPA (x:xs) o | and $ map (\n -> n/=[]) (x:xs) =  crossPA xs (crossP o x) 
+                         | otherwise = []
 
     allData <- sequence $ map sRead names
     return (crossPA allData [])
