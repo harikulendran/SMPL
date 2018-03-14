@@ -53,6 +53,7 @@ spec = do
         it "E3" $ do
             output <- testInterpret "ifexist 2 in ((for 1,2 in E3A.csv) & (for 2,3 in E3B.csv)) do 1,3"
             output `shouldBe` "1, 1, \n1, 1, \n1, 1, \n1, 1, \n"
+--        describe "Additional tests" $ do
 
 main :: IO ()
 main = hspec spec

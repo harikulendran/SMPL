@@ -126,3 +126,9 @@ interpret str = eval (eval' [] (shive $ alexScanTokens str) "null") >>= putStr
 
 --For testing
 testInterpret str = eval (eval' [] (shive $ alexScanTokens str) "null")
+
+
+execute filename = do
+    command <- Text.lines <$> (Text.readFile filename)
+    let string = Text.unpack $ head $ command
+    interpret string

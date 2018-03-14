@@ -66,3 +66,6 @@ lzip      _      _ = []
 split      [] delim = []
 split (s:str) delim | s == delim = str
                     | otherwise  = split str delim
+
+
+
