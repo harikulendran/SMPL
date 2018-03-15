@@ -131,11 +131,11 @@ eval (scope,vars) = do
 
 
 --Interpret
-interpret str = eval (eval' [] (shive $ alexScanTokens str) "null") >>= putStr
+interpret str = eval (eval' [] (parse $ alexScanTokens str) "null") >>= putStr
 
 
 --For testing
-testInterpret str = eval (eval' [] (shive $ alexScanTokens str) "null")
+testInterpret str = eval (eval' [] (parse $ alexScanTokens str) "null")
 
 
 execute filename = do

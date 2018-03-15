@@ -4,9 +4,9 @@ import Tokens
 import Data.List
 }
 
-%name shive
+%name parse
 %tokentype { Token }
-%error { shiveShilarny }
+%error { errorOut }
 %token
     do      { TokenDo p }
     '&'     { TokenAnd p }
@@ -45,12 +45,12 @@ FExp : file                      { $1 }
 
 
 {
-shiveShilarny :: [Token] -> a
-shiveShilarny xs = error ("Shive shilarny at " ++ lcn ++ "\n")
+errorOut :: [Token] -> a
+errorOut xs = error ("Error at " ++ lcn ++ "\n")
     where
     lcn =  case xs of
-             [] -> "the files snuff'd it"
-             x:_ -> "stroka " ++ show l ++ ", kolonka " ++ show c
+             [] -> "the end of the file"
+             x:_ -> "row " ++ show l ++ ", col " ++ show c
                  where
                  AlexPn _ l c = token_posn x
 
