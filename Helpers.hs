@@ -57,7 +57,7 @@ equiv xs = (filter (\n -> n /= (head xs)) xs) == []
 
 (===) :: String -> String -> Bool
 (===) s1 s2 =
-    let testString s = filter (\n -> n=='.' || isAlpha n || isNumber n) s
+    let testString s = filter (\n -> n=='.' || isAlpha n || isNumber n) (split s '=')
     in (testString s1) == (testString s2)
 
 lzip (x:xs) (y:ys) = (x++[y]):lzip xs ys
