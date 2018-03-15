@@ -73,7 +73,7 @@ split (s:str) delim =
     in split' (s:str) []
 
 
-sortNonCom = sortBy (compare `on` (filter (\n -> n/=',')))
+sortNonCom = sortBy (compare `on` (filter (\n -> n/=' ')))
 
 
 
