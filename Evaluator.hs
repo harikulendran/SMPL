@@ -12,16 +12,7 @@ import Data.Char (isAlpha, isNumber)
 import Helpers
 
 
-
-
-
---Helpers
-
-
-
-
 --Operator Implementations
---rename this one (maybe use update function
 filterScope :: Scope -> Scope -> Scope -> (Scope,Scope)
 filterScope s1 [] out = (s1,out)
 filterScope s1 (s:s2) out | s1 `contains` (fst s) = filterScope s1 s2 (out++[(fst s,(find (fst s) s1))])
@@ -37,7 +28,7 @@ filterByEqual [] _ _      = ([],[])
 filterByEqual scope v1 v2 = ((scope `updateAll` (fst v1,(find (fst v1) scope)++"="++(show $ (fst v2)))) `updateAll` (fst v2,(find (fst v2) scope)++"="++(show $ (fst v1))),[])
 
 
-    
+--Evaluate the parse tree   
 eval' :: Scope -> Expr -> String  -> (Scope,Scope)
 eval' scope expr str  = case expr of
     Var i                -> (scope ++ [(i,str)],[])
@@ -90,6 +81,8 @@ loadFiles scopes vars = do
     allData <- sequence $ map sRead names
     return (crossPA allData [])
 
+
+-- execute the evaluated parsetree output on the csv files
 eval (scope,vars) = do
     fdata <- loadFiles scope vars
     let orderLine' :: Scope -> Scope -> String
@@ -120,6 +113,7 @@ eval (scope,vars) = do
         orderLine line | orderLine'' line == [] = []
                        | otherwise = init $ orderLine'' line
 
+        -- Properly order output
         out = filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
         outA = map (\n -> splitOn "," n) out
         ordA = sort outA
@@ -134,7 +128,7 @@ eval (scope,vars) = do
 interpret str = eval (eval' [] (parse $ alexScanTokens str) "null") >>= putStr
 
 
---For testing
+--For Testing (unit test files not included in submission)
 testInterpret str = eval (eval' [] (parse $ alexScanTokens str) "null")
 
 

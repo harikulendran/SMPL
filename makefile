@@ -11,3 +11,5 @@ Evaluator : Tokens.hs Grammar.hs Helpers.hs Evaluator.hs
 
 clean:
 	rm -f  *.o *.hi
+
+# Make file structure from example at: https://github.com/ghulette/happy-example/blob/master/Makefile

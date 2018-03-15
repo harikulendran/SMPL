@@ -42,6 +42,7 @@ data Token =
   TokenRParen AlexPosn
   deriving (Eq,Show)
 
+-- code to extract position
 token_posn (TokenDo p) = p
 token_posn (TokenAnd p) = p
 token_posn (TokenEquals p) = p
@@ -55,4 +56,5 @@ token_posn (TokenComma p) = p
 token_posn (TokenLParen p) = p
 token_posn (TokenRParen p) = p
 
+-- adapted from: https://github.com/simonmar/alex/blob/master/examples/Tokens_posn.x
 }
