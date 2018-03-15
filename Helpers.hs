@@ -72,8 +72,9 @@ split (s:str) delim =
                          | otherwise  = split' str (m++[s])
     in split' (s:str) []
 
-
-sortNonCom = sortBy (compare `on` (filter (\n -> n/=' ')))
+change n | n==',' = ' '
+         | otherwise = n
+sortNonCom = sortBy (compare `on` (map (\n -> change n)))
 
 
 
