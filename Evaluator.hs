@@ -7,6 +7,7 @@ import Grammar
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import Data.List (sort, group, reverse)
+import Data.List.Split(splitOn)
 import Data.Char (isAlpha, isNumber)
 import Helpers
 
@@ -119,7 +120,12 @@ eval (scope,vars) = do
         orderLine line | orderLine'' line == [] = []
                        | otherwise = init $ orderLine'' line
 
-    return $ unlines $ sortNonCom $ filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
+        out = filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
+        outA = map (\n -> splitOn "," n) out
+        ordA = sort outA
+        sinA = map (\p -> concatMap (\n -> n++",") p) ordA
+
+    return $ unlines $ sinA
 
 
 
