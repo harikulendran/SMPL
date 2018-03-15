@@ -10,4 +10,4 @@ Evaluator : Tokens.hs Grammar.hs Helpers.hs Evaluator.hs
 	ghc --make -o myinterpreter Evaluator
 
 clean:
-	rm -f Grammar.hs Tokens.hs *.o *.hi
+	rm -f  *.o *.hi
