@@ -125,7 +125,7 @@ eval (scope,vars) = do
         ordA = sort outA
         sinA = map (\p -> concatMap (\n -> n++",") p) ordA
 
-    return $ unlines $ sinA
+    return $ unlines $ map init sinA
 
 
 
