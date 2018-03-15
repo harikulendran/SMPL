@@ -64,8 +64,11 @@ lzip (x:xs) (y:ys) = (x++[y]):lzip xs ys
 lzip      _      _ = []
 
 split      [] delim = []
-split (s:str) delim | s == delim = str
-                    | otherwise  = split str delim
+split (s:str) delim = 
+    let split'      [] m = m
+        split' (s:str) m | s == delim = str
+                         | otherwise  = split' str (m++[s])
+    in split' (s:str) []
 
 
 
