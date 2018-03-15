@@ -119,7 +119,7 @@ eval (scope,vars) = do
         orderLine line | orderLine'' line == [] = []
                        | otherwise = init $ orderLine'' line
 
-    return $ unlines $ sort $ filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
+    return $ unlines $ sortNonCom $ filter (\n -> n /= []) (map orderLine (cleanData fdata scope))
 
 
 

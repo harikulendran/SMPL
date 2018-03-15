@@ -1,6 +1,8 @@
 module Helpers where
 
 import Data.Char (isAlpha, isNumber)
+import Data.List (sort, sortBy)
+import Data.Function
 
 type Scope = [(Int,String)]
 
@@ -69,6 +71,9 @@ split (s:str) delim =
         split' (s:str) m | s == delim = str
                          | otherwise  = split' str (m++[s])
     in split' (s:str) []
+
+
+sortNonCom = sortBy (compare `on` (filter (\n -> n/=',')))
 
 
 
