@@ -1,0 +1,16 @@
+ghc:
+    - "8.0.2"
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install alex
+    - sudo apt-get install happy
+
+install:
+    - cabal install Split
+    - cabal install Text
+
+script:
+    - make
+    - cp smpl autotester/
+    - cd autotester
+    - ./auto
