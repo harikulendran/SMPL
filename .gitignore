@@ -10,4 +10,5 @@ Tokens.hs
 *.yaml
 .idea/
 .DS*
+*.zip
 myinterpreter
