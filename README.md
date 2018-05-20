@@ -85,4 +85,4 @@ In this program, the variable 3 has not been assigned, so when we check equality
 **Checking for equality** – Given the above, it might not be immediately apparent how SMPL checks variables for equality. When the interpreter reads the program, it flags any variable that the requires an equality check with the variable that it must be equal to. Later it enumerates all such variables that need to be equal and performs alpha conversions on the whole scope of the program renaming these variables to a single free variable. It then loads and assigns the data from the files and asserts that any time a variable appears more than once in the scope, they must have the same value. This is why name has global scope for variables, even if they are assigned in two unconnected smaller scopes
 
 ### VALID DERIVATION TREE
-![Derivation Tree](https://github.com/harikulendran/SMPL/img/SMPL-grammar-tree.png "Derivation Tree")
+![Derivation Tree](https://raw.githubusercontent.com/harikulendran/SMPL/master/img/SMPL-grammar-tree.png "Derivation Tree")
