@@ -5,6 +5,7 @@ before_install:
     - sudo apt-get install alex
     - sudo apt-get install happy
     - sudo apt-get install cabal-install
+    - cabal update
 
 install:
     - cabal install Split
