@@ -1,4 +1,4 @@
-# SMPL USER MANUAL [![Build Status](https://travis-ci.com/harikulendran/SMPL.svg?branch=master)](https://travis-ci.com/harikulendran/SMPL)
+# SMPL USER MANUAL 
 SMPL is a simple declarative language for conjunctive queries. SMPL programs are concise, each one is a single line at most. The grammar is designed to be as human readable as possible, so a program written in SMPL should be perfectly understandable at a glance.
 ## SYNTAX
 Here is a simple program we’ll use to explain how the syntax of SMPL works:
